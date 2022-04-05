@@ -119,7 +119,7 @@ export default function CustomTable() {
       
     },[width])
 
-    console.log(width);
+    // console.log(width);
     return (
         <div className='table-data'>
             <Table 
