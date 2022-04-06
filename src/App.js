@@ -18,3 +18,7 @@ function App() {
 }
 
 export default App;
+
+
+//tham khao
+//https://www.digitalocean.com/community/tutorials/react-crud-context-hooks#step-4-setting-up-routes

@@ -2,7 +2,7 @@ import React, { forwardRef, useRef, useState, useContext } from 'react'
 import { Modal, ButtonToolbar, Button, Form, Schema, DatePicker } from 'rsuite'
 import {GlobalContext} from '../context/GlobalState'
 import { initialState } from '../reducers/index'
-import * as moment from 'moment'
+// import * as moment from 'moment'
 
 const { StringType, NumberType } = Schema.Types
 const model = Schema.Model({
@@ -36,7 +36,7 @@ const AddUser =() => {
         // id: 0,
         name:'',
         phone:'',
-        birthday: ''
+        birthday: Date()
     })
 
     const showModal = () => {

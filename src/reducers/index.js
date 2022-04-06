@@ -4,7 +4,7 @@ export const initialState = {
     user:{
         name:'',
         phone:'',
-        birthday:''
+        birthday: Date()
     },
     users: []
 }
