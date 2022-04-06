@@ -1,16 +1,19 @@
 import './App.css';
 import AddUser from './components/AddUser';
 import CustomTable from './components/CustomTable';
+import { GlobalProvider } from './context/GlobalState'
 
 function App() {
   
   return (
-    <div className='manage-user'>
-      <AddUser/>
-      <div>
-        <CustomTable/>
+    <GlobalProvider>
+      <div className='manage-user'>
+        <AddUser/>
+        <div>
+          <CustomTable/>
+        </div>
       </div>
-    </div>
+    </GlobalProvider>
   );
 }
 
