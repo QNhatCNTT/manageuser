@@ -1,35 +1,38 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useReducer } from "react"
-// import { addUser,editUser,deleteUser } from '../actions/index'
-import reducer, { initialState } from '../reducers/index'
+import AppReducer from './AppReducer'
+
+const initialState = {
+    users: [
+        {
+            id: 1,
+            name:'Nguyen Van A',
+            phone:'0123456789',
+            birthday:'2001-02-12'
+        }
+    ]
+}
 
 export const GlobalContext = createContext(initialState)
 
 export const GlobalProvider = ({children}) => {
-    const [state, dispatch] = useReducer(reducer, initialState)
-
-    const setUser = user => {
-        dispatch({
-            type: 'set_user',
-            payload: user
-        })
-    }
+    const [state, dispatch] = useReducer(AppReducer, initialState)
 
     const addUser = user => {
         dispatch({
-            type: 'add_user',
+            type: 'ADD_USER',
             payload: user
         })
     }
     const editUser = user => {
         dispatch({
-            type: 'edit_user',
+            type: 'EDIT_USER',
             payload: user
         })
     }
     const deleteUser = id => {
         dispatch({
-            type: 'delete_user',
+            type: 'DELETE_USER',
             payload: id
         })
     }
@@ -38,7 +41,6 @@ export const GlobalProvider = ({children}) => {
         <GlobalContext.Provider
             value={{
                 users: state.users,
-                setUser,
                 addUser,
                 editUser,
                 deleteUser

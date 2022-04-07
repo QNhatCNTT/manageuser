@@ -1,17 +1,17 @@
+import * as moment from 'moment'
 import React, { forwardRef, useRef, useState, useContext } from 'react'
 import { Modal, ButtonToolbar, Button, Form, Schema, DatePicker } from 'rsuite'
 import {GlobalContext} from '../context/GlobalState'
-import { initialState } from '../reducers/index'
-// import * as moment from 'moment'
 
-const { StringType, NumberType } = Schema.Types
+
+const { StringType, DateType, NumberType } = Schema.Types
 const model = Schema.Model({
     name: StringType()
     .minLength(5, 'This field must be greater than 5.')
     .isRequired('This field is required.'),
     phone: NumberType()
     .isRequired('This field is required.'),
-    birthday: StringType()
+    birthday: DateType()
     .isRequired('This field is required.')
 })
 
@@ -28,17 +28,17 @@ const TextField = forwardRef((props, ref) => {
 
 const AddUser =() => {
     const formRef = useRef()
-    const { setUser, addUser, users } = useContext(GlobalContext)
-    console.log(users);
+    const { addUser, users } = useContext(GlobalContext)
+    // console.log(users);
     const [visible, setVisible] = useState(false)
     const [error, setError] =useState({})
-    const [value, setValue] = useState({
-        // id: 0,
+    const [formValue, setFormValue] = useState({
         name:'',
         phone:'',
-        birthday: Date()
+        birthday: null
     })
 
+    
     const showModal = () => {
         setVisible(true)
     }
@@ -50,20 +50,19 @@ const AddUser =() => {
         e.preventDefault();
         const newUser = {
             id: users.length + 1,
-            name: value.name,
-            phone: value.phone,
-            birthday: Date(value.birthday)
+            name: formValue.name,
+            phone: formValue.phone,
+            birthday:  moment(new Date(formValue.birthday)).format("YYYY-MM-DD")
         }
-        console.log(Date(value.birthday));
         // console.log(formRef.current.check());
         if(!formRef.current.check()){
             console.log('error', error);
             setVisible(true)
         }else{
             addUser(newUser)
-            setUser(initialState)
             setVisible(false)
-            console.log('value', value);
+            console.log('formValue', formValue);
+            console.log(newUser);
         }
     }
     
@@ -90,21 +89,32 @@ const AddUser =() => {
                         <Form 
                             model={model} 
                             ref={formRef}
-                            onChange={setValue}
+                            onChange={setFormValue}
                             onCheck={setError}
-                            formDefaultValue={value}
+                            formValue={ formValue ||  Date(formValue).toLocaleDateString()}
                         >
-                            <TextField name='name' label='Name' placeholder='Enter your name' errorMessage={error.name}/>
-                            <TextField name='phone' label='Phone' placeholder='Enter your phone' errorMessage={error.phone}/>
-                            <div className='field' style={{display:'flex', flexDirection:'column', margin:'5px 0'}}>
-                                <p>Birthday</p>
-                                <DatePicker 
-                                    oneTap 
-                                    format='yyyy-MM-dd' 
-                                    style={{margin: '5px 0'}}
-                                    placeholder='Choose Date'
-                                />
-                            </div>
+                            <TextField 
+                                name='name' 
+                                label='Name' 
+                                placeholder='Enter your name' 
+                                errorMessage={error.name} 
+                            />
+                            <TextField 
+                                name='phone' 
+                                label='Phone' 
+                                placeholder='Enter your phone' 
+                                errorMessage={error.phone} 
+                            />
+                            <TextField 
+                                name='birthday' 
+                                label='BirthDay' 
+                                placeholder='Choose Date Of Birth' 
+                                oneTap
+                                format='yyyy-MM-dd'
+                                errorMessage={error.birthday} 
+                                accepter={DatePicker} 
+                                style={{margin: '5px 0', width: 300}} 
+                            />
                             <div style={{display:'flex', justifyContent:'space-evenly', marginTop: 30 }}>
                                 <Button 
                                 appearance='primary'

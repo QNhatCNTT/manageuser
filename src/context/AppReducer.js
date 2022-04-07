@@ -1,29 +1,14 @@
-import { SETUSER, ADDUSER, EDITUSER, DELETEUSER } from '../constants/index'
-
-export const initialState = {
-    user:{
-        name:'',
-        phone:'',
-        birthday: Date()
-    },
-    users: []
-}
-
 const reducer = (state, action) => {
     switch(action.type){
-        case SETUSER:
-            return {
-                ...state,
-                user: action.payload
-            }
-        case ADDUSER:
+        case 'ADD_USER':
             return {
                 ...state,
                 users: [...state.users, action.payload]
             }
-        case EDITUSER:
+        case 'EDIT_USER':
             const updateUser = action.payload
-            const updateUsers = state.users.map(user => {
+
+            const updateUsers = state.users.map( user => {
                 if(user.id === updateUser.id){
                     return updateUser
                 }
@@ -35,7 +20,7 @@ const reducer = (state, action) => {
                 users: updateUsers
             }
         
-        case DELETEUSER:
+        case 'DELETE_USER':
             return {
                 ...state,
                 users: state.users.filter(
@@ -44,7 +29,7 @@ const reducer = (state, action) => {
             }
         
         default:
-            throw new Error('Invalid action.')
+            return state
     }
 }
 

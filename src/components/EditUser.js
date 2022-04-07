@@ -1,6 +1,8 @@
-import React, { forwardRef, useRef, useState } from 'react'
+/* eslint-disable no-unused-vars */
+import React, { forwardRef, useContext, useEffect, useRef, useState } from 'react'
 import { Button, Form, Schema, DatePicker } from 'rsuite'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { GlobalContext } from '../context/GlobalState'
 
 const { StringType, NumberType } = Schema.Types
 const model = Schema.Model({
@@ -27,23 +29,43 @@ const TextField = forwardRef((props, ref) => {
 const  EditUser = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const [value, setValue] = useState({
-        // id: location.state.data['id'],
-        name: location.state.data['name'],
-        phone: location.state.data['phone'],
-        birthday: Date(location.state.data['birthday'])
+    const { users, editUser } = useContext(GlobalContext)
+
+    const [selectedUser, setSelectedUser] = useState({
+        id:null,
+        name:'',
+        phone:'',
+        birthday: ''
     })
-    console.log(value);
     const [error, setError] = useState({})
     const formRef = useRef()
-    const handleSave = () => {
+
+    const currentUserId = location.state.data.id;
+    console.log(currentUserId);
+    useEffect(() => {
+        const userId = currentUserId
+        const selectedUser = users.find( currentUserTraversal => currentUserTraversal.id === parseInt(userId))
+
+        setSelectedUser(selectedUser)
+    }, [currentUserId,users])
+    console.log(selectedUser);
+    const handleSave = (e) => {
+        e.preventDefault();
         console.log(formRef.current.check());
         if(formRef.current.check()){
+            editUser(selectedUser)
             navigate(-1)
         }else{
             console.log('Error', error);
         }
     }
+    const handleOnChange = (userKey, newValue) => {
+        setSelectedUser({ ...selectedUser, [userKey]: newValue})
+    }   
+    if(!selectedUser || !selectedUser.id){
+        return <div>Invalid User ID.</div>
+    }
+    
     return (
         <div 
         style={{
@@ -65,9 +87,10 @@ const  EditUser = () => {
                 <Form 
                     model={model} 
                     ref={formRef}
-                    onChange={setValue}
+                    onChange={e=>handleOnChange([`${users}`], e.target.value[`${users}`])}
                     onCheck={setError}
-                    formDefaultValue={value}
+                    formDefaultValue={selectedUser}
+                    value={selectedUser}
                 >
                     <h3 style={{
                         display:'flex',
@@ -91,7 +114,7 @@ const  EditUser = () => {
                             oneTap 
                             format='yyyy-MM-dd' 
                             style={{margin: '5px 0'}} 
-                            defaultValue={Date(value.birthday)}
+                            value={new Date(selectedUser.birthday)}
                         />
                     </div>
                     <div 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Table, Pagination } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
+import { GlobalContext } from '../context/GlobalState'
+import { Table, Pagination } from 'rsuite'
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
-import { GlobalContext } from '../context/GlobalState'
 
 // const mockData = [
 //   {
@@ -106,11 +106,11 @@ const MyPagination = ({total, onChange, current}) => {
 
 const a = window.innerWidth - 100;
 
-export default function CustomTable() {
+export default function UserTable() {
     const [current, setCurrent] = useState(1)
     const [width, setWidth] = useState(a)
-    const { users } = useContext(GlobalContext)
-    console.log(users);
+    const { users, deleteUser } = useContext(GlobalContext)
+    // console.log(users);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -124,7 +124,6 @@ export default function CustomTable() {
       
     },[width])
 
-    // console.log(width);
     return (
         <div className='table-data'>
             <Table 
@@ -161,6 +160,7 @@ export default function CustomTable() {
 
                         const handleDelete = () => {
                           console.log('id: ', rowData.id);
+                          deleteUser(rowData.id)
                         }
                         return (
                           <span style={{display:'flex', justifyContent:'space-evenly'}}>
