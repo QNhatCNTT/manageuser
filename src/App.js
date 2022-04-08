@@ -24,4 +24,5 @@ export default App;
 
 
 //tham khao
-//https://www.digitalocean.com/community/tutorials/react-crud-context-hooks#step-4-setting-up-routes
+//https://stackoverflow.com/questions/64841268/how-can-i-use-an-axios-get-call-inside-a-context-provider-in-react
+//https://stackoverflow.com/questions/65877884/how-to-fetch-data-and-store-in-react-context-api

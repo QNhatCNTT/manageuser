@@ -4,87 +4,8 @@ import { GlobalContext } from '../context/GlobalState'
 import { Table, Pagination } from 'rsuite'
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
-
-// const mockData = [
-//   {
-//     id: 1,
-//     name: 'Van Hai Pham',
-//     birthday: '2022-03-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 2,
-//     name: 'Van A Nguyen', 
-//     birthday: '2022-03-16',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 3,
-//     name: 'Thanh D Tran',
-//     birthday: '2022-01-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 4,
-//     name: 'Thi E Nguyen',
-//     birthday: '2021-01-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 5,
-//     name: 'Tan B Bui',
-//     birthday: '2002-03-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 6,
-//     name: 'Tan B Bui',
-//     birthday: '2012-03-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 7,
-//     name: 'Tan B Bui',
-//     birthday: '2020-03-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 8,
-//     name: 'Tan B Bui',
-//     birthday: '2021-01-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 9,
-//     name: 'Tan B Bui',
-//     birthday: '2000-03-11',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 10,
-//     name: 'Tan B Bui',
-//     birthday: '2020-09-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 11,
-//     name: 'Tan B Bui',
-//     birthday: '2012-04-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 12,
-//     name: 'Tan B Bui',
-//     birthday: '2012-10-17',
-//     phone: '0964782553',
-//   },
-//   {
-//     id: 13,
-//     name: 'Tan B Bui',
-//     birthday: '2012-01-17',
-//     phone: '0964782553',
-//   }
-// ];
+// import axios from 'axios';
+// import API from '../api/api';
 
 const pageSize = 5
 
@@ -106,12 +27,15 @@ const MyPagination = ({total, onChange, current}) => {
 
 const a = window.innerWidth - 100;
 
+
 export default function UserTable() {
     const [current, setCurrent] = useState(1)
     const [width, setWidth] = useState(a)
-    const { users, deleteUser } = useContext(GlobalContext)
-    // console.log(users);
+    const { initData , deleteUser } = useContext(GlobalContext)
+    console.log(typeof initData);
     const navigate = useNavigate();
+
+    
 
     useEffect(() => {
       const handleResize = () => {
@@ -129,7 +53,7 @@ export default function UserTable() {
             <Table 
             height={270}
             width={width}
-            data={getData(users,current,pageSize)}
+            data={getData(initData,current,pageSize)}
             onRowClick={data => {
               console.log(data);
             }}
@@ -153,14 +77,14 @@ export default function UserTable() {
                       rowData => {
 
                         const handleEdit = () => {
-                          console.log('id: ', rowData.id);
+                          console.log('id: ', rowData._id);
                           console.log(('rowData', rowData));
-                          navigate(`/users/${rowData.id}`, { state: { data: rowData} });
+                          navigate(`/users/${rowData._id}`, { state: { data: rowData} });
                         }
 
                         const handleDelete = () => {
-                          console.log('id: ', rowData.id);
-                          deleteUser(rowData.id)
+                          console.log('id: ', rowData._id);
+                          deleteUser(rowData._id)
                         }
                         return (
                           <span style={{display:'flex', justifyContent:'space-around', alignItems:'center'}}>
@@ -176,7 +100,7 @@ export default function UserTable() {
 
             <MyPagination
               onChange={setCurrent}
-              total={users.length}
+              total={initData.length}
               current={current}
             />
         </div>

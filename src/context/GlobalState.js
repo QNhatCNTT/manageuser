@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { createContext, useReducer } from "react"
+import axios from "axios"
+import React, { createContext, useEffect, useReducer, useState } from "react"
+import { getApiUsers } from "../api/apiUser"
 import AppReducer from './AppReducer'
 import logger from './logger'
 
@@ -14,11 +16,28 @@ const initialState = {
     ]
 }
 
-export const GlobalContext = createContext(initialState)
+export const GlobalContext = createContext()
 
 export const GlobalProvider = ({children}) => {
-    const [state, dispatch] = useReducer(logger(AppReducer), initialState)
+    const [initData, setInitData] = useState([])
+    const [state, dispatch] = useReducer(logger(AppReducer), initData)
+    const baseUrl= "http://192.168.9.20:5000/api/users"
+    useEffect( ()=>{
+        axios.get(baseUrl)
+        .then(function(response){
+          const data = response.data.result;
+          console.log(typeof data);
+          console.log(data);
+          setInitData(data)
+        })
+        .catch(function(error){
+          console.log(error)
+        })
 
+        // const data = getApiUsers()
+        // console.log(data);
+      },[])
+    
     const addUser = user => {
         dispatch({
             type: 'ADD_USER',
@@ -41,7 +60,7 @@ export const GlobalProvider = ({children}) => {
     return (
         <GlobalContext.Provider
             value={{
-                users: state.users,
+                initData,
                 addUser,
                 editUser,
                 deleteUser

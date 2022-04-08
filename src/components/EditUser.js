@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { forwardRef, useContext, useEffect, useRef, useState } from 'react'
 import { Button, Form, Schema, DatePicker } from 'rsuite'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { GlobalContext } from '../context/GlobalState'
 import * as moment from 'moment'
 
@@ -30,10 +30,11 @@ const TextField = forwardRef((props, ref) => {
 const  EditUser = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const { users, editUser } = useContext(GlobalContext)
+    const id = useParams()
+    const { initData, editUser } = useContext(GlobalContext)
 
     const [selectedUser, setSelectedUser] = useState({
-        id:null,
+        _id:'',
         name:'',
         phone: null,
         birthday: null
@@ -41,14 +42,17 @@ const  EditUser = () => {
     const [error, setError] = useState({})
     const formRef = useRef()
 
-    const currentUserId = location.state.data.id;
-    console.log(currentUserId);
+    const currentUserId = id;
+    console.log(currentUserId.id);
     useEffect(() => {
-        const userId = currentUserId
-        const selectedUser = users.find( currentUserTraversal => currentUserTraversal.id === parseInt(userId))
+        const userId = currentUserId.id
+        const selectedUser = initData.find( currentUserTraversal => {
+            console.log(currentUserTraversal._id);
+            return currentUserTraversal._id === userId
+        })
 
         setSelectedUser(selectedUser)
-    }, [currentUserId,users])
+    }, [currentUserId,initData])
     console.log(selectedUser);
     const handleSave = (e) => {
         console.log(selectedUser);
@@ -64,7 +68,7 @@ const  EditUser = () => {
     const handleOnChange = (userKey, newValue) => {
         setSelectedUser({ ...selectedUser, [userKey]: newValue })
     }   
-    if(!selectedUser || !selectedUser.id){
+    if(!selectedUser || !selectedUser._id){
         return <div>Invalid User ID.</div>
     }
 
