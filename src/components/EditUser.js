@@ -35,7 +35,7 @@ const  EditUser = () => {
     const [selectedUser, setSelectedUser] = useState({
         id:null,
         name:'',
-        phone:'',
+        phone: null,
         birthday: null
     })
     const [error, setError] = useState({})

@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useReducer } from "react"
 import AppReducer from './AppReducer'
+import logger from './logger'
 
 const initialState = {
     users: [
         {
             id: 1,
             name:'Nguyen Van A',
-            phone:'0123456789',
+            phone: 123456789,
             birthday:'2001-02-12'
         }
     ]
@@ -16,7 +17,7 @@ const initialState = {
 export const GlobalContext = createContext(initialState)
 
 export const GlobalProvider = ({children}) => {
-    const [state, dispatch] = useReducer(AppReducer, initialState)
+    const [state, dispatch] = useReducer(logger(AppReducer), initialState)
 
     const addUser = user => {
         dispatch({

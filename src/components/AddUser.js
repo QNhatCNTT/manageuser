@@ -34,7 +34,7 @@ const AddUser =() => {
     const [error, setError] =useState({})
     const [formValue, setFormValue] = useState({
         name:'',
-        phone:'',
+        phone: '',
         birthday: null
     })
 
