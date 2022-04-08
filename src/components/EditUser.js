@@ -3,6 +3,7 @@ import React, { forwardRef, useContext, useEffect, useRef, useState } from 'reac
 import { Button, Form, Schema, DatePicker } from 'rsuite'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { GlobalContext } from '../context/GlobalState'
+import * as moment from 'moment'
 
 const { StringType, NumberType } = Schema.Types
 const model = Schema.Model({
@@ -35,7 +36,7 @@ const  EditUser = () => {
         id:null,
         name:'',
         phone:'',
-        birthday: ''
+        birthday: null
     })
     const [error, setError] = useState({})
     const formRef = useRef()
@@ -50,8 +51,9 @@ const  EditUser = () => {
     }, [currentUserId,users])
     console.log(selectedUser);
     const handleSave = (e) => {
+        console.log(selectedUser);
         e.preventDefault();
-        console.log(formRef.current.check());
+        // console.log(formRef.current.check());
         if(formRef.current.check()){
             editUser(selectedUser)
             navigate(-1)
@@ -60,11 +62,14 @@ const  EditUser = () => {
         }
     }
     const handleOnChange = (userKey, newValue) => {
-        setSelectedUser({ ...selectedUser, [userKey]: newValue})
+        setSelectedUser({ ...selectedUser, [userKey]: newValue })
     }   
     if(!selectedUser || !selectedUser.id){
         return <div>Invalid User ID.</div>
     }
+
+    const [,a, b, c] = Object.keys(selectedUser);
+    // console.log(a,b,c);
     
     return (
         <div 
@@ -81,24 +86,31 @@ const  EditUser = () => {
                 width: 500, 
                 padding:'50px 0', 
                 marginTop: 150,
-                borderRadius: 13
+                borderRadius: 13,
+                backgroundColor:'GhostWhite'
                 }}
             >   
                 <Form 
                     model={model} 
                     ref={formRef}
-                    onChange={e=>handleOnChange([`${users}`], e.target.value[`${users}`])}
                     onCheck={setError}
-                    formDefaultValue={selectedUser}
-                    value={selectedUser}
+                    formValue={selectedUser}
+                    defaultValue={selectedUser}
+                    onChange={ (newData,e) => {
+                           if(e.target.id === 'name-4'){
+                               return handleOnChange(a, newData[a])
+                           }else{
+                               return handleOnChange(b, newData[b])
+                           }
+                    }}
                 >
-                    <h3 style={{
+                    <h4 style={{
                         display:'flex',
                         justifyContent:'center',
                         marginBottom: 30
                     }}>
                         User Details
-                    </h3>
+                    </h4>
                     <TextField name='name' label='Name' errorMessage={error.name}/>
                     <TextField name='phone' label='Phone' errorMessage={error.phone}/>
                     <div 
@@ -114,7 +126,9 @@ const  EditUser = () => {
                             oneTap 
                             format='yyyy-MM-dd' 
                             style={{margin: '5px 0'}} 
-                            value={new Date(selectedUser.birthday)}
+                            placeholder='Choose Date Of Birth' 
+                            defaultValue={new Date(selectedUser.birthday)}
+                            onChange={ newDate => handleOnChange(c, moment(new Date(newDate)).format("YYYY-MM-DD")) }
                         />
                     </div>
                     <div 
@@ -141,8 +155,8 @@ const  EditUser = () => {
                         onClick={() => navigate(-1)}
                         style={{
                             borderRadius: 14, 
-                            background: 'linear-gradient(130deg, rgba(61,52,65,1) 18%, rgba(200,208,224,1) 75%)', 
-                            color: 'white',
+                            background: 'radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)', 
+                            color: 'black',
                             padding: '8px 18px',
                             width: 80,
                         }}

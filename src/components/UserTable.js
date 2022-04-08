@@ -148,7 +148,7 @@ export default function UserTable() {
               </Table.Column>
               <Table.Column width={width*0.1}>
                   <Table.HeaderCell style={{display:'flex', justifyContent:'center'}}>ACTIONS</Table.HeaderCell>
-                  <Table.Cell>
+                  <Table.Cell style={{boxSizing:'border-box'}}>
                     {
                       rowData => {
 
@@ -163,9 +163,9 @@ export default function UserTable() {
                           deleteUser(rowData.id)
                         }
                         return (
-                          <span style={{display:'flex', justifyContent:'space-evenly'}}>
-                            <span onClick={handleEdit} style={{color:'red',cursor: 'pointer',fontSize: 18}}> <EditIcon/> </span> 
-                            <span onClick={handleDelete} style={{color:'black',cursor: 'pointer', fontSize: 18}}> <TrashIcon/> </span>
+                          <span style={{display:'flex', justifyContent:'space-around', alignItems:'center'}}>
+                            <span onClick={handleEdit} style={{color:'Magenta',cursor: 'pointer',fontSize: 17}}> <EditIcon/> </span> 
+                            <span onClick={handleDelete} style={{color:'SaddleBrown',cursor: 'pointer', fontSize: 17}}> <TrashIcon/> </span>
                           </span>
                         );
                       }

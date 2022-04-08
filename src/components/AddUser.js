@@ -83,7 +83,7 @@ const AddUser =() => {
                     </Button>
                 </ButtonToolbar>
             </div>
-            <Modal open={visible} onClose={handleCancel}>
+            <Modal open={visible} onClose={handleCancel} style={{backgroundColor:'GhostWhite'}}>
                 <Modal.Body>
                     <div style={{display:'flex', justifyContent:'center'}}>
                         <Form 
@@ -93,6 +93,13 @@ const AddUser =() => {
                             onCheck={setError}
                             formValue={ formValue ||  Date(formValue).toLocaleDateString()}
                         >
+                            <h4 style={{
+                                display:'flex',
+                                justifyContent:'center',
+                                marginBottom: 30
+                            }}>
+                                New User
+                            </h4>
                             <TextField 
                                 name='name' 
                                 label='Name' 
@@ -134,8 +141,8 @@ const AddUser =() => {
                                 onClick={handleCancel} 
                                 style={{
                                     borderRadius: 14, 
-                                    background: 'linear-gradient(130deg, rgba(61,52,65,1) 18%, rgba(200,208,224,1) 75%)', 
-                                    color: 'white',
+                                    background: 'radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)', 
+                                    color: 'black',
                                     padding: '8px 18px',
                                     width: 80
                                 }}
