@@ -97,7 +97,8 @@ const  EditUser = () => {
                     formValue={selectedUser}
                     defaultValue={selectedUser}
                     onChange={ (newData,e) => {
-                           if(e.target.id === 'name-4'){
+                        console.log(e.target);
+                           if(e.target.name === 'name'){
                                return handleOnChange(a, newData[a])
                            }else{
                                return handleOnChange(b, newData[b])
