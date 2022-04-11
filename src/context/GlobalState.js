@@ -1,72 +1,86 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios"
-import React, { createContext, useEffect, useReducer, useState } from "react"
-import { getApiUsers } from "../api/apiUser"
-import AppReducer from './AppReducer'
-import logger from './logger'
+import React, { createContext, useEffect, useReducer, useState } from "react";
+import AppReducer from "./AppReducer";
+import logger from "./logger";
+import UserApi from "../api/UserApi";
 
-const initialState = {
-    users: [
-        {
-            id: 1,
-            name:'Nguyen Van A',
-            phone: 123456789,
-            birthday:'2001-02-12'
-        }
-    ]
-}
+export const GlobalContext = createContext();
 
-export const GlobalContext = createContext()
-
-export const GlobalProvider = ({children}) => {
-    const [initData, setInitData] = useState([])
-    const [state, dispatch] = useReducer(logger(AppReducer), initData)
-    const baseUrl= "http://192.168.9.20:5000/api/users"
-    useEffect( ()=>{
-        axios.get(baseUrl)
-        .then(function(response){
-          const data = response.data.result;
-          console.log(typeof data);
-          console.log(data);
-          setInitData(data)
-        })
-        .catch(function(error){
-          console.log(error)
-        })
-
-        // const data = getApiUsers()
-        // console.log(data);
-      },[])
-    
-    const addUser = user => {
-        dispatch({
-            type: 'ADD_USER',
-            payload: user
-        })
+export const GlobalProvider = ({ children }) => {
+  const [initData, setInitData] = useState([]);
+  const [state, dispatch] = useReducer(logger(AppReducer), initData);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await UserApi.getData();
+        const data = await res.data;
+        setInitData(data);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
     }
-    const editUser = user => {
-        dispatch({
-            type: 'EDIT_USER',
-            payload: user
-        })
-    }
-    const deleteUser = id => {
-        dispatch({
-            type: 'DELETE_USER',
-            payload: id
-        })
-    }
+    fetchData();
+  }, []);
 
-    return (
-        <GlobalContext.Provider
-            value={{
-                initData,
-                addUser,
-                editUser,
-                deleteUser
-            }}
-        >
-            {children}
-        </GlobalContext.Provider>
-    )
-}
+  const addUser = async (user) => {
+    try {
+      const res = await UserApi.addData(user);
+      const data = res.data;
+      if (res.status === 200) {
+        setInitData([...initData, data]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // return dispatch({
+    //   type: "ADD_USER",
+    //   payload: user,
+    // });
+  };
+
+  const editUser = async (user) => {
+    try {
+      const res = await UserApi.editData(user, user._id);
+      if (res.status === 200) {
+        const index = initData.findIndex(user._id === initData._id);
+        initData[index] = user;
+        setInitData([...initData]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // return dispatch({
+    //   type: "EDIT_USER",
+    //   payload: user,
+    // });
+  };
+
+  const deleteUser = async (id) => {
+    try {
+      const res = await UserApi.removeData(id);
+      if (res.status === 200) {
+        const newData = initData.filter((user) => user._id !== id);
+        setInitData([...newData]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // return dispatch({
+    //   type: "DELETE_USER",
+    //   payload: id,
+    // });
+  };
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        initData,
+        addUser,
+        editUser,
+        deleteUser,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};

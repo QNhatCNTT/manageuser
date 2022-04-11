@@ -1,108 +1,130 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { GlobalContext } from '../context/GlobalState'
-import { Table, Pagination } from 'rsuite'
-import EditIcon from '@rsuite/icons/Edit';
-import TrashIcon from '@rsuite/icons/Trash';
-// import axios from 'axios';
-// import API from '../api/api';
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../context/GlobalState";
+import { Table, Pagination } from "rsuite";
+import EditIcon from "@rsuite/icons/Edit";
+import TrashIcon from "@rsuite/icons/Trash";
 
-const pageSize = 5
+const pageSize = 5;
 
 const getData = (data, current, pageSize) => {
-  return data.slice((current-1)*pageSize,current*pageSize)
-}
+  return data.slice((current - 1) * pageSize, current * pageSize);
+};
 
-const MyPagination = ({total, onChange, current}) => {
+const MyPagination = ({ total, onChange, current }) => {
   return (
     <Pagination
-    onChangePage={onChange}
+      onChangePage={onChange}
       activePage={current}
-      total={total} 
+      total={total}
       limit={pageSize}
-      style={{display:'flex',justifyContent:'center', marginTop:'30px',}}   
+      style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}
     />
-    );
-}
+  );
+};
 
 const a = window.innerWidth - 100;
 
-
 export default function UserTable() {
-    const [current, setCurrent] = useState(1)
-    const [width, setWidth] = useState(a)
-    const { initData , deleteUser } = useContext(GlobalContext)
-    console.log(typeof initData);
-    const navigate = useNavigate();
+  const [current, setCurrent] = useState(1);
+  const [width, setWidth] = useState(a);
+  const { initData, deleteUser } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
-    
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
 
-    useEffect(() => {
-      const handleResize = () => {
-        setWidth(window.innerWidth)
-      }
+    window.addEventListener("resize", handleResize);
 
-      window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [width]);
 
-      return () => {window.removeEventListener('resize', handleResize)}
-      
-    },[width])
+  return (
+    <div className="table-data">
+      <Table
+        height={270}
+        width={width}
+        data={getData(initData, current, pageSize)}
+        onRowClick={(data) => {
+          console.log(data);
+        }}
+      >
+        <Table.Column width={width * 0.3}>
+          <Table.HeaderCell>NAME</Table.HeaderCell>
+          <Table.Cell dataKey="name" />
+        </Table.Column>
+        <Table.Column width={width * 0.3}>
+          <Table.HeaderCell>PHONE</Table.HeaderCell>
+          <Table.Cell dataKey="phone" />
+        </Table.Column>
+        <Table.Column width={width * 0.3}>
+          <Table.HeaderCell>BIRTHDAY</Table.HeaderCell>
+          <Table.Cell dataKey="birth_day" />
+        </Table.Column>
+        <Table.Column width={width * 0.1}>
+          <Table.HeaderCell
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            ACTIONS
+          </Table.HeaderCell>
+          <Table.Cell style={{ boxSizing: "border-box" }}>
+            {(rowData) => {
+              const handleEdit = () => {
+                console.log("id: ", rowData._id);
+                console.log(("rowData", rowData));
+                navigate(`/users/${rowData._id}`, { state: { data: rowData } });
+              };
 
-    return (
-        <div className='table-data'>
-            <Table 
-            height={270}
-            width={width}
-            data={getData(initData,current,pageSize)}
-            onRowClick={data => {
-              console.log(data);
+              const handleDelete = () => {
+                console.log("id: ", rowData._id);
+                deleteUser(rowData._id);
+              };
+              return (
+                <span
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  <span
+                    onClick={handleEdit}
+                    style={{
+                      color: "Magenta",
+                      cursor: "pointer",
+                      fontSize: 17,
+                    }}
+                  >
+                    {" "}
+                    <EditIcon />{" "}
+                  </span>
+                  <span
+                    onClick={handleDelete}
+                    style={{
+                      color: "SaddleBrown",
+                      cursor: "pointer",
+                      fontSize: 17,
+                    }}
+                  >
+                    {" "}
+                    <TrashIcon />{" "}
+                  </span>
+                </span>
+              );
             }}
-            >
-              <Table.Column width={width*0.3}>
-                  <Table.HeaderCell>NAME</Table.HeaderCell>
-                  <Table.Cell dataKey='name'/>
-              </Table.Column >
-              <Table.Column width={width*0.3}>
-                  <Table.HeaderCell>PHONE</Table.HeaderCell>
-                  <Table.Cell dataKey='phone'/>
-              </Table.Column>
-              <Table.Column width={width*0.3}>
-                  <Table.HeaderCell>BIRTHDAY</Table.HeaderCell>
-                  <Table.Cell dataKey='birthday'/>
-              </Table.Column>
-              <Table.Column width={width*0.1}>
-                  <Table.HeaderCell style={{display:'flex', justifyContent:'center'}}>ACTIONS</Table.HeaderCell>
-                  <Table.Cell style={{boxSizing:'border-box'}}>
-                    {
-                      rowData => {
+          </Table.Cell>
+        </Table.Column>
+      </Table>
 
-                        const handleEdit = () => {
-                          console.log('id: ', rowData._id);
-                          console.log(('rowData', rowData));
-                          navigate(`/users/${rowData._id}`, { state: { data: rowData} });
-                        }
-
-                        const handleDelete = () => {
-                          console.log('id: ', rowData._id);
-                          deleteUser(rowData._id)
-                        }
-                        return (
-                          <span style={{display:'flex', justifyContent:'space-around', alignItems:'center'}}>
-                            <span onClick={handleEdit} style={{color:'Magenta',cursor: 'pointer',fontSize: 17}}> <EditIcon/> </span> 
-                            <span onClick={handleDelete} style={{color:'SaddleBrown',cursor: 'pointer', fontSize: 17}}> <TrashIcon/> </span>
-                          </span>
-                        );
-                      }
-                    }
-                  </Table.Cell>
-              </Table.Column>
-            </Table>
-
-            <MyPagination
-              onChange={setCurrent}
-              total={initData.length}
-              current={current}
-            />
-        </div>
-    )
+      <MyPagination
+        onChange={setCurrent}
+        total={initData.length}
+        current={current}
+      />
+    </div>
+  );
 }
