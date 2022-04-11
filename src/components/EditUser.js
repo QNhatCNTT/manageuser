@@ -60,7 +60,6 @@ const EditUser = () => {
   }, [currentUserId, initData]);
 
   const handleSave = (e) => {
-    console.log(selectedUser);
     e.preventDefault();
     if (formRef.current.check()) {
       editUser(selectedUser);
@@ -133,7 +132,11 @@ const EditUser = () => {
               placeholder="Choose Date Of Birth"
               value={new Date(selectedUser.birth_day)}
               onChange={(newDate) =>
-                handleOnChange("birth_day", moment(new Date(newDate)).format())
+                handleOnChange(
+                  "birth_day",
+                  moment(new Date(newDate)).format("YYYY-MM-DD") +
+                    "T00:00:00.000Z"
+                )
               }
             />
           </div>

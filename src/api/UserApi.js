@@ -4,7 +4,6 @@ const getData = () => {
   return API.get("/users");
 };
 const addData = (data) => {
-  console.log(data);
   return API.post("/users", data);
 };
 const editData = (data, id) => {

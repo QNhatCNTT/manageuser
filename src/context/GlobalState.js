@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useEffect, useReducer, useState } from "react";
-import AppReducer from "./AppReducer";
 import logger from "./logger";
 import UserApi from "../api/UserApi";
 
@@ -8,7 +7,6 @@ export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [initData, setInitData] = useState([]);
-  const [state, dispatch] = useReducer(logger(AppReducer), initData);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -32,10 +30,6 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-    // return dispatch({
-    //   type: "ADD_USER",
-    //   payload: user,
-    // });
   };
 
   const editUser = async (user) => {
@@ -44,16 +38,11 @@ export const GlobalProvider = ({ children }) => {
       if (res.status === 200) {
         const index = initData.findIndex((data) => data._id === user._id);
         initData[index] = user;
-        console.log([...initData]);
         setInitData([...initData]);
       }
     } catch (error) {
       console.log(error);
     }
-    // return dispatch({
-    //   type: "EDIT_USER",
-    //   payload: user,
-    // });
   };
 
   const deleteUser = async (id) => {
@@ -66,10 +55,6 @@ export const GlobalProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-    // return dispatch({
-    //   type: "DELETE_USER",
-    //   payload: id,
-    // });
   };
 
   return (

@@ -49,9 +49,7 @@ export default function UserTable() {
         height={270}
         width={width}
         data={getData(initData, current, pageSize)}
-        onRowClick={(data) => {
-          console.log(data);
-        }}
+        onRowClick={(data) => {}}
       >
         <Table.Column width={width * 0.3}>
           <Table.HeaderCell>NAME</Table.HeaderCell>
@@ -74,13 +72,10 @@ export default function UserTable() {
           <Table.Cell style={{ boxSizing: "border-box" }}>
             {(rowData) => {
               const handleEdit = () => {
-                console.log("id: ", rowData._id);
-                console.log(("rowData", rowData));
                 navigate(`/users/${rowData._id}`, { state: { data: rowData } });
               };
 
               const handleDelete = () => {
-                console.log("id: ", rowData._id);
                 deleteUser(rowData._id);
               };
               return (

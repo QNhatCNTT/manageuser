@@ -62,7 +62,6 @@ const AddUser = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(moment(new Date(formValue.birth_day)).format("YYYY-MM-DD"));
     const newUser = {
       name: formValue.name,
       phone: formValue.phone,
@@ -75,7 +74,7 @@ const AddUser = () => {
     } else {
       addUser(newUser);
       setVisible(false);
-      console.log("formValue", formValue);
+      // console.log("formValue", formValue);
     }
   };
 
