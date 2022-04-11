@@ -42,8 +42,9 @@ export const GlobalProvider = ({ children }) => {
     try {
       const res = await UserApi.editData(user, user._id);
       if (res.status === 200) {
-        const index = initData.findIndex(user._id === initData._id);
+        const index = initData.findIndex((data) => data._id === user._id);
         initData[index] = user;
+        console.log([...initData]);
         setInitData([...initData]);
       }
     } catch (error) {

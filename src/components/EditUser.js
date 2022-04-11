@@ -99,7 +99,6 @@ const EditUser = () => {
           formValue={selectedUser}
           defaultValue={selectedUser}
           onChange={(newData, e) => {
-            console.log(e.target);
             if (e.target.name === "name") {
               return handleOnChange("name", newData["name"]);
             } else {
@@ -134,10 +133,7 @@ const EditUser = () => {
               placeholder="Choose Date Of Birth"
               value={new Date(selectedUser.birth_day)}
               onChange={(newDate) =>
-                handleOnChange(
-                  "birth_day",
-                  moment(new Date(newDate)).format("YYYY-MM-DD")
-                )
+                handleOnChange("birth_day", moment(new Date(newDate)).format())
               }
             />
           </div>
