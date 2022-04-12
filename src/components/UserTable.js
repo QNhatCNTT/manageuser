@@ -7,10 +7,6 @@ import TrashIcon from "@rsuite/icons/Trash";
 
 const pageSize = 5;
 
-const getData = (data, current, pageSize) => {
-  return data.slice((current - 1) * pageSize, current * pageSize);
-};
-
 const MyPagination = ({ total, onChange, current }) => {
   return (
     <Pagination
@@ -28,8 +24,22 @@ const a = window.innerWidth - 100;
 export default function UserTable() {
   const [current, setCurrent] = useState(1);
   const [width, setWidth] = useState(a);
-  const { initData, deleteUser } = useContext(GlobalContext);
+  const { initData, isSearch, foundData, deleteUser } =
+    useContext(GlobalContext);
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (isSearch) {
+      setData(foundData);
+    } else {
+      setData(initData);
+    }
+  }, [isSearch, foundData, initData]);
+
+  const getData = (current, pageSize) => {
+    return data.slice((current - 1) * pageSize, current * pageSize);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,13 +52,12 @@ export default function UserTable() {
       window.removeEventListener("resize", handleResize);
     };
   }, [width]);
-
   return (
     <div className="table-data">
       <Table
         height={270}
         width={width}
-        data={getData(initData, current, pageSize)}
+        data={getData(current, pageSize)}
         onRowClick={(data) => {}}
       >
         <Table.Column width={width * 0.3}>

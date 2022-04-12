@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { createContext, useEffect, useReducer, useState } from "react";
-import logger from "./logger";
+import React, { createContext, useEffect, useState } from "react";
 import UserApi from "../api/UserApi";
 
 export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [initData, setInitData] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
+  const [foundData, setFoundData] = useState([]);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -57,13 +58,36 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const searchText = (text) => {
+    const value = text.toLowerCase();
+    if (value.length > 0) {
+      setIsSearch(true);
+      const data = initData.filter((user) => {
+        try {
+          return (
+            user.name.toLowerCase().search(value) !== -1 ||
+            user.phone.toString().toLowerCase().search(value) !== -1
+          );
+        } catch (error) {
+          return [];
+        }
+      });
+      setFoundData(data);
+    } else {
+      setIsSearch(false);
+    }
+  };
+
   return (
     <GlobalContext.Provider
       value={{
         initData,
+        foundData,
+        isSearch,
         addUser,
         editUser,
         deleteUser,
+        searchText,
       }}
     >
       {children}

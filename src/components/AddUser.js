@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import * as moment from "moment";
-import React, { forwardRef, useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Modal, ButtonToolbar, Button, Form, Schema, DatePicker } from "rsuite";
 import { GlobalContext } from "../context/GlobalState";
-import UserApi from "../api/UserApi";
+import TextField from "./Common";
 
-const { StringType, DateType, NumberType } = Schema.Types;
+const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({
   name: StringType()
     .minLength(5, "This field must be greater than 5.")
@@ -13,51 +13,27 @@ const model = Schema.Model({
   phone: NumberType().isRequired("This field is required."),
 });
 
-const TextField = forwardRef((props, ref) => {
-  const { name, label, accepter, error, ...rest } = props;
-  return (
-    <Form.Group controlId={`${name}-4`} ref={ref}>
-      <Form.ControlLabel>{label}</Form.ControlLabel>
-      <Form.Control
-        name={name}
-        accepter={accepter}
-        errorMessage={error}
-        {...rest}
-      />
-    </Form.Group>
-  );
-});
+const resetData = {
+  _id: null,
+  name: "",
+  phone: "",
+  birth_day: null,
+};
 
 const AddUser = () => {
   const formRef = useRef();
-  const { addUser, initData } = useContext(GlobalContext);
-  // console.log(initData);
+  const { addUser } = useContext(GlobalContext);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState({});
-  const [formValue, setFormValue] = useState({
-    _id: null,
-    name: "",
-    phone: "",
-    birth_day: null,
-  });
+  const [formValue, setFormValue] = useState(resetData);
 
   const showModal = () => {
     setVisible(true);
-    setFormValue({
-      _id: null,
-      name: "",
-      phone: "",
-      birth_day: null,
-    });
+    setFormValue(resetData);
   };
   const handleCancel = () => {
     setVisible(false);
-    setFormValue({
-      _id: null,
-      name: "",
-      phone: "",
-      birth_day: null,
-    });
+    setFormValue(resetData);
   };
 
   const handleSubmit = (e) => {

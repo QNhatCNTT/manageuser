@@ -1,15 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, {
-  forwardRef,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Schema, DatePicker } from "rsuite";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../context/GlobalState";
 import * as moment from "moment";
+import TextField from "./Common";
 
 const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({
@@ -19,24 +14,8 @@ const model = Schema.Model({
   phone: NumberType().isRequired("This field is required."),
 });
 
-const TextField = forwardRef((props, ref) => {
-  const { name, label, accepter, error, ...rest } = props;
-  return (
-    <Form.Group controlId={`${name}-4`} ref={ref}>
-      <Form.ControlLabel>{label}</Form.ControlLabel>
-      <Form.Control
-        name={name}
-        accepter={accepter}
-        errorMessage={error}
-        {...rest}
-      />
-    </Form.Group>
-  );
-});
-
 const EditUser = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const id = useParams();
   const { initData, editUser } = useContext(GlobalContext);
 
