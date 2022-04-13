@@ -3,7 +3,7 @@ import * as moment from "moment";
 import React, { useRef, useState, useContext } from "react";
 import { Modal, ButtonToolbar, Button, Form, Schema, DatePicker } from "rsuite";
 import { GlobalContext } from "../context/GlobalState";
-import TextField from "./Common";
+import { TextField } from "./Common";
 
 const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({

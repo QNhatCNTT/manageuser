@@ -4,7 +4,7 @@ import { Button, Form, Schema, DatePicker } from "rsuite";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../context/GlobalState";
 import * as moment from "moment";
-import TextField from "./Common";
+import { TextField } from "./Common";
 
 const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({
