@@ -65,8 +65,8 @@ export const GlobalProvider = ({ children }) => {
       const data = initData.filter((user) => {
         try {
           return (
-            user.name.toLowerCase().search(value) !== -1 ||
-            user.phone.toString().toLowerCase().search(value) !== -1
+            user.name.toLowerCase().includes(value) ||
+            user.phone.toString().toLowerCase().includes(value)
           );
         } catch (error) {
           return [];
