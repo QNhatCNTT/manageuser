@@ -111,6 +111,7 @@ export default function UserTable() {
                     display: "flex",
                     justifyContent: "space-around",
                     alignItems: "center",
+                    margin: `0 ${(width * 0.1 - 64) / 2}px`,
                   }}
                 >
                   <span
@@ -119,6 +120,7 @@ export default function UserTable() {
                       color: "Magenta",
                       cursor: "pointer",
                       fontSize: 17,
+                      marginRight: 5,
                     }}
                   >
                     {" "}
@@ -130,6 +132,7 @@ export default function UserTable() {
                       color: "SaddleBrown",
                       cursor: "pointer",
                       fontSize: 17,
+                      marginLeft: 5,
                     }}
                   >
                     {" "}
